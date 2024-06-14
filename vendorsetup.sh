@@ -1,1 +1,3 @@
-export COMMON_LUNCH_CHOICES := omni_venus-userdebug omni_venus-eng omni_venus-user
+add_lunch_combo omni_venus-userdebug
+add_lunch_combo omni_venus-eng
+add_lunch_combo omni_venus-user
