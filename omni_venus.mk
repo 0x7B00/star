@@ -1,4 +1,8 @@
-PRODUCT_DEVICE := venus
+# Inherit some common Omni stuff.
+$(call inherit-product, vendor/omni/config/common.mk)
+
+# Inherit from venus device
+$(call inherit-product, device/xiaomi/venus/device.mk)PRODUCT_DEVICE := venus
 PRODUCT_NAME := omni_venus
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := Mi 11 Ultra
