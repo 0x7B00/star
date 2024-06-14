@@ -21,11 +21,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     bootctrl.xiaomi_sm8350
 
-PRODUCT_STATIC_BOOT_CONTROL_HAL := \
-    bootctrl.xiaomi_sm8350 \
-    libgptutils \
-    libz \
-    libcutils
+# Remove the obsolete PRODUCT_STATIC_BOOT_CONTROL_HAL
+# PRODUCT_STATIC_BOOT_CONTROL_HAL := \
+#    bootctrl.xiaomi_sm8350 \
+#    libgptutils \
+#    libz \
+#    libcutils
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
