@@ -35,6 +35,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi \
     ro.product.cpu.abilist32=armeabi-v7a,armeabi \
     ro.product.cpu.abilist64=arm64-v8a
-
-# Include hardware-specific configurations
-$(call inherit-product-if-exists, vendor/xiaomi/venus/venus-vendor.mk)
