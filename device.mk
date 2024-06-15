@@ -1,36 +1,62 @@
 #
-# Copyright (C) 2024 The Android Open Source Project
-# Copyright (C) 2024 SebaUbuntu's TWRP device tree generator
+# Copyright (C) 2020 The TwrpBuilder Open-Source Project
 #
-# SPDX-License-Identifier: Apache-2.0
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
 
-LOCAL_PATH := device/xiaomi/venus
-# A/B
-AB_OTA_POSTINSTALL_CONFIG += \
-    RUN_POSTINSTALL_system=true \
-    POSTINSTALL_PATH_system=system/bin/otapreopt_script \
-    FILESYSTEM_TYPE_system=ext4 \
-    POSTINSTALL_OPTIONAL_system=true
+# Configure base.mk
+$(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
-# Boot control HAL
-PRODUCT_PACKAGES += \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+# Configure core_64_bit_only.mk
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
-PRODUCT_PACKAGES += \
-    bootctrl.xiaomi_sm8350
+# Configure gsi_keys.mk
+$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 
-# Remove the obsolete PRODUCT_STATIC_BOOT_CONTROL_HAL
-# PRODUCT_STATIC_BOOT_CONTROL_HAL := \
-#    bootctrl.xiaomi_sm8350 \
-#    libgptutils \
-#    libz \
-#    libcutils
+# Configure Virtual A/B
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+
+# Configure SDCard replacement functionality
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
+# Configure twrp
+$(call inherit-product, vendor/twrp/config/common.mk)
 
 PRODUCT_PACKAGES += \
-    otapreopt_script \
-    cppreopts.sh \
-    update_engine \
-    update_verifier \
-    update_engine_sideload
+    bootctrl.xiaomi_sm8350.recovery \
+    android.hardware.boot@1.1-impl-qti.recovery
+
+# SHIPPING API
+PRODUCT_SHIPPING_API_LEVEL := 30
+# VNDK API
+PRODUCT_TARGET_VNDK_VERSION := 31
+
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(DEVICE_PATH)
+
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
+# otacert
+PRODUCT_EXTRA_RECOVERY_KEYS += \
+    $(DEVICE_PATH)/security/miui_releasekey
+
+# PRODUCT_RELEASE_NAME ro.twrp.device.name
+PRODUCT_PROPERTY_OVERRIDES += ro.twrp.device.name=$(PRODUCT_RELEASE_NAME)
+
+TWRP_REQUIRED_MODULES += miui_prebuilt \
+    magisk_prebuilt
+
+ifneq ($(TW_SKKK_VER_CODE),)
+PRODUCT_PROPERTY_OVERRIDES += ro.twrp.version.skkk.code=$(TW_SKKK_VER_CODE)
+endif
